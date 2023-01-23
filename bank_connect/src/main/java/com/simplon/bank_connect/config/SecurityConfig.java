@@ -26,7 +26,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
@@ -56,11 +55,16 @@ public class SecurityConfig  {
                 .csrf().disable()
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests()
-                .requestMatchers("/api/auth/**","/compte/sms","/client/","/client/save/sendSms","/client/save/verifySms")
+                .requestMatchers("/api/auth/**","/compte/sms","/client/save/sendSms","/client/save/verifySms")
                 .permitAll()
-                .anyRequest()
-                .authenticated()
                 .and()
+                .authorizeHttpRequests(aut ->
+                        aut.requestMatchers("/client/**").hasAuthority("CLIENT")
+                )
+                .authorizeHttpRequests(aut ->
+                        aut.requestMatchers("/agent/**").hasAuthority("ADMIN")
+                )
+                .authorizeHttpRequests(auth->auth.anyRequest().authenticated())
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
@@ -92,14 +96,14 @@ public class SecurityConfig  {
             @Override
             public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
                 if (email.endsWith("-CLIENT")) {
-                    email = email.substring(0, email.length() - 7);
-                    System.out.println(email);
-                    Client user = clientService.getClientByEmail(email);
-                    return new User(user.getEmail(), user.getPassword(), Collections.singleton(new SimpleGrantedAuthority("USER")));
+                    String emailOnly = email.substring(0, email.length() - 7);
+                    Client user = clientService.getClientByEmail(emailOnly);
+                        return new User(user.getEmail(), user.getPassword(), Collections.singleton(new SimpleGrantedAuthority("CLIENT")));
 
                 } else if (email.endsWith("-ADMIN")) {
                     email = email.substring(0, email.length() - 6);
                     System.out.println(email);
+                    System.out.println("ADMIN");
                     Agent agent = agentService.getAgentByEmail(email);
                     return new User(agent.getEmail(), agent.getPassword(), Collections.singleton(new SimpleGrantedAuthority("ADMIN")));
                 }
@@ -109,14 +113,20 @@ public class SecurityConfig  {
     }
 
     @Bean
-    CorsConfigurationSource corsConfigurationSource(){
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:4200"));
-        configuration.setAllowedMethods(Arrays.asList("GET","POST"));
-        configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
+    public CorsFilter corsFilter() {
+        CorsConfiguration corsConfiguration = new CorsConfiguration();
+        corsConfiguration.setAllowCredentials(true);
+        corsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
+        corsConfiguration.setAllowedHeaders(Arrays.asList("Origin", "Access-Control-Allow-Origin", "Content-Type",
+                "Accept", "Authorization", "Origin, Accept", "X-Requested-With",
+                "Access-Control-Request-Method", "Access-Control-Request-Headers"));
+        corsConfiguration.setExposedHeaders(Arrays.asList("Origin", "Content-Type", "Accept", "Authorization",
+                "Access-Control-Allow-Origin", "Access-Control-Allow-Origin", "Access-Control-Allow-Credentials"));
+        corsConfiguration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
+        urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", corsConfiguration);
+        return new CorsFilter(urlBasedCorsConfigurationSource);
+
     }
 
 }
