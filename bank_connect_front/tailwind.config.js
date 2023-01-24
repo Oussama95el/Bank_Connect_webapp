@@ -5,7 +5,7 @@ module.exports = {
   theme: {
    extend: {
      backgroundColor:{
-       "primary": "#f3f4f6",
+       "primary": "#e85311",
        "secondary": "#e1ddde",
        "danger": "#e3342f",
        "success": "#38c172",
@@ -15,7 +15,7 @@ module.exports = {
        "serif": ["Arial", "serif"],
      },
      textColor: {
-       "primary": "#7f387a",
+       "primary": "#e85311",
        "secondary": "#e1ddde",
        "default": "#000000",
      }
