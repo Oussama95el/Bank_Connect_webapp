@@ -10,9 +10,6 @@
         <module name="bank_connect" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="bank_connect" target="19" />
-    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
