@@ -2,15 +2,13 @@ package com.simplon.bank_connect.client;
 
 
 import com.simplon.bank_connect.utils.SmsSenderService;
-//import com.twilio.twiml.voice.Sms;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
-@RequestMapping("/client")
+@RequestMapping("/api/v1/client")
 @RequiredArgsConstructor
 public class ClientController {
 

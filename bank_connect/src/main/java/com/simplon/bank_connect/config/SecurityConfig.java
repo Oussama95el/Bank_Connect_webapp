@@ -55,7 +55,7 @@ public class SecurityConfig  {
                 .csrf().disable()
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests()
-                .requestMatchers("/api/auth/**","/compte/sms","/client/save/sendSms","/client/save/verifySms")
+                .requestMatchers("/api/v1/auth/**","/api/v1/compte/sms","/api/v1/client/save/sendSms","/api/v1/client/save/verifySms","/api/v1/agent/save")
                 .permitAll()
                 .and()
                 .authorizeHttpRequests(aut ->

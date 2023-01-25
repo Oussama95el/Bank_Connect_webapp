@@ -27,7 +27,6 @@ public class CompteService {
     }
 
     public Compte saveCompte(Compte compte, Long idClient) {
-        System.out.println("idClient = " + idClient + " compte = " + compte);
         if(compte instanceof Standard){
             // set values for standard
             compte.setClient(clientRepository.findById(idClient).get());

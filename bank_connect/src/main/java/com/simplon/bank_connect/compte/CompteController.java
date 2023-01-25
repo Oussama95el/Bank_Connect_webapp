@@ -3,13 +3,14 @@ package com.simplon.bank_connect.compte;
 import com.simplon.bank_connect.compte.professionnel.Professionel;
 import com.simplon.bank_connect.compte.standard.Standard;
 import com.simplon.bank_connect.utils.SmsSenderService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/compte")
+@RequestMapping("/api/v1/compte")
 public class CompteController {
 
 
@@ -25,7 +26,7 @@ public class CompteController {
 
     @GetMapping("/sms")
     public void sendSms() {
-        smsSenderService.sendSms("+212 606 422895", "Salam alikoum lala asmae neqadem lik rassi smiti brahim o rah khedite nemratek men facebook la kan momkin net3arefo");
+        smsSenderService.sendSms("+212 606 422895", "Votre compte a été créé avec succès");
     }
 
     @PostMapping("/add/standard")

@@ -14,40 +14,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
 public class AuthenticationController {
     private final AuthenticationManager authenticationManager;
     private final UserDetailsService userDetailsService;
     private final JwtUtil jwtUtil;
 
-    @PostMapping("/client")
-    public ResponseEntity<String> ClientAuthenticate(@RequestBody AuthenticationRequest request) {
-        System.out.println(request.getPassword());
-        System.out.println( request.getEmail());
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getEmail()+"-CLIENT" ,request.getPassword().trim())
-        );
-        System.out.println("CLIENT AUTH");
-        final UserDetails user = userDetailsService.loadUserByUsername(request.getEmail()+"-CLIENT");
+    private final AuthenticationService authenticationService;
 
-        if (user != null) {
-            return ResponseEntity.ok(jwtUtil.generateToken(user, "-CLIENT"));
-        }
-        return ResponseEntity.status(400).body("error occurred");
+    @PostMapping("/client")
+    public ResponseEntity<AuthenticationResponse> ClientAuthenticate(@RequestBody AuthenticationRequest request) {
+        return ResponseEntity.ok( authenticationService.authenticate(request) );
     }
 
     @PostMapping("/agent")
-    public ResponseEntity<String> AgentAuthenticate(@RequestBody AuthenticationRequest request) {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getEmail()+"-ADMIN", request.getPassword().trim())
-        );
-
-        final UserDetails user = userDetailsService.loadUserByUsername(request.getEmail()+"-ADMIN");
-
-        if (user != null) {
-            return ResponseEntity.ok(jwtUtil.generateToken(user, "-ADMIN"));
-        }
-        return ResponseEntity.status(400).body("error occurred");
+    public ResponseEntity<AuthenticationResponse> AgentAuthenticate(@RequestBody AuthenticationRequest request) {
+        return ResponseEntity.ok(authenticationService.authenticate(request));
     }
 }
