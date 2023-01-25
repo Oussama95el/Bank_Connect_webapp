@@ -1,0 +1,6 @@
+{
+  "root": "dist/bank_connect_front",
+  "routes": {
+    "/**": "index.html"
+  }
+}
