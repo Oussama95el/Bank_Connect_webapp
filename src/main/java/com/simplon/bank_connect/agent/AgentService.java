@@ -35,4 +35,8 @@ public class AgentService {
         agent.setPassword(passwordEncoder.encode(agent.getPassword()));
         return agentRepository.save(agent);
     }
+
+    public void deleteAgent(Long id) {
+        agentRepository.deleteById(id);
+    }
 }
