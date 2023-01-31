@@ -7,18 +7,18 @@ const routes = [
     path: '',
     // loadChildren: () => import('./pages/pages.module').then(m => m.PagesModule)
   },
-  {
-    path: 'auth',
-    // loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule)
-  },
-  {
-    path: 'error',
-    // loadChildren: () => import('./error/error.module').then(m => m.ErrorModule)
-  },
-  {
-    path: '**',
-    redirectTo: 'error/404'
-  }
+  // {
+  //   path: 'auth',
+  //   // loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule)
+  // },
+  // {
+  //   path: 'error',
+  //   // loadChildren: () => import('./error/error.module').then(m => m.ErrorModule)
+  // },
+  // {
+  //   path: '**',
+  //   redirectTo: 'error/404'
+  // }
 ];
 
 @NgModule({
